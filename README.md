@@ -8,8 +8,9 @@ This document covers connecting a Simulink Cartpole model with the platform usin
 - [ ]	Create an Azure account and add a “Bonsai” resource into your Azure Account. 
 
 ## Bonsai Required Scripts
-Once you have completed the above, open *carpole* or *moab* in the *samples* folder. Each of these samples contains several files:
+Once you have completed the above, open *carpole* or *moab* in the *samples* folder. If you choose the *moab* sample, you will first need to install the Simscape Multibody MATLAB Add-On.
 
+Each sample contains several files:
 1. **bonsaiConfig.m**
 2. **bonsaiTrain.m**
 3. **bonsaiAssess.m**
