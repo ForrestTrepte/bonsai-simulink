@@ -62,7 +62,7 @@ Once you have the three scripts in place, you can configure your model using the
 
 Once you have configured the toolbox and the above into the block integrated with your model, run `bonsaiTrain` from the Matlab console. This will initiate a training session that you must "attach" to a brain. The name of the model will show up in your Bonsai workspace under the **Simulators** section with your simulator name listed as *Unmanaged*.
 
-When **bonsaiTrain.m** run, an unmanaged simulator executes inside MATLAB on your local PC. Running an unmanaged simulator locally is useful while developing and debugging a simulation and this allows you to see the model executing. Later on we will run training via a manged simulator as described in Uploading and Scaling Your Model, below. However, once you upload your model to the Bonsai server environment you cannot see the model, so it is disabled. If you attempt to render the model in the server environment the connection will likely timeout and training will not start correctly.
+When **bonsaiTrain.m** runs, an unmanaged simulator executes inside MATLAB on your local PC. Running an unmanaged simulator locally is useful while developing and debugging a simulation and this allows you to see the model executing. Later on we will run training via a manged simulator as described in Uploading and Scaling Your Model, below. However, once you upload your model to the Bonsai server environment you cannot see the model, so it is disabled. If you attempt to render the model in the server environment the connection will likely timeout and training will not start correctly.
 
 You should not need to modify any values in the `bonsaiTrain` script, but to help clarify the general flow of using Bonsai is:
 
@@ -75,15 +75,11 @@ You should not need to modify any values in the `bonsaiTrain` script, but to hel
 7. Steps 5 and 6 are repeated until an episode End event or an error occurs
 8. Upon an episode End event, the model will close and the Bonsai toolbox will create a new Episode. Steps 2-8 will repeat.
 
-Another area to call out is the `episodeStartCallback` function. Again, it is not necessary to change anything, but the code is present here to understand what is happening under the hood. 
-
-When Bonsai initiates a training session, a callback is fired and handled here. This allows the user to configure their model environment and set parameters to what their model requires. It is also in this command that the user starts their simulation. Some users may choose to pass just the `mdl` to `sim()` while others have more dynamic SimulationInput requirements. Each time you start a new training Episode in Bonsai, the Bonsai brain will send initial start up parameters that can be used to initialize the model to set it to various states.
+Another area to call out is the `episodeStartCallback` function. Again, it is not necessary to change anything, but the code is present here to understand what is happening under the hood. When Bonsai initiates a training session, a callback is fired and handled here. This allows the user to configure their model environment and set parameters to what their model requires. It is also in this command that the user starts their simulation. Some users may choose to pass just the `mdl` to `sim()` while others have more dynamic SimulationInput requirements. Each time you start a new training Episode in Bonsai, the Bonsai brain will send initial start up parameters that can be used to initialize the model to set it to various states.
 
 ## Uploading and Scaling Your Model
 
 Once you have exported your model and validated that it works locally, you can zip the entire contents of the project folder that contains the exported Simulink Model. The below uses the Moab model as an example:
-
-For example, if your folder structure is:
 
 ```
 moab
@@ -97,8 +93,10 @@ moab
 |    └── MOAB_PARAMS.m  
 |    └── runMixer.m
 |    └── runMoabLocalLoop.m
+|─── bonsaiAssess.m
 |─── bonsaiConfig.m
 |─── bonsaiTrain.m
+|─── initializeMoab.m
 |─── MOAB.slx
 |─── readme.md
 └─── startup_MOAB.m
@@ -109,15 +107,15 @@ The file structure above contains all the necessary contents required to run the
 1. **bonsaiConfig.m**
 2. **bonsaiTrain.m**
 3. **bonsaiAssessData.m**
-4. **your_model.slx**
+4. **your_model.slx** (MOAB.slx in the case of this Moab sample)
 
-Back in the Bonsai workspace, next to **Simulators**, click the **Add sim** button.
+Back in the Bonsai workspace, under **Simulators**, click the **Add sim** button.
 
-This will open a dialog. Select MathWorks. Select or drag the moab.zip file. Give your simulator a name, then click **Create simulator**. 
+This will open a dialog. Select **MathWorks Simulink**. Select or drag the moab.zip file. Give your simulator a name, then click **Create simulator**. 
 
 After the simulator is created you will see the new simulator appear under the **Simulators** section.
 
-Now click the **Teach** tab. 
+The Bonsai service will create an archived image for your simulator, which will take a few minutes. When this has been completed, click the **Create brain** button, enter a name for your brain, and click **Create brain**. Select the brain that you just created under **Simulators** to open the **Teach** tab.
 
 In the simulator definition, just after the open brackets, add back the package statement using the name of the simulator you gave during the Add Simulator dialog above.
 
