@@ -4,6 +4,8 @@
 % Model run loop for training a Bonsai brain
 
 function MatlabBonsaiRunTraining(config, mdl, episodeStartCallback)
+    global session
+    
     logger = bonsai.Logger('BonsaiRunTraining', config.verbose);
 
     % configure and start session

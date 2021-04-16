@@ -16,7 +16,13 @@ MatlabBonsaiRunTraining(config, mdl, @episodeStartCallback);
 
 % callback for running model with provided episode configuration
 function episodeStartCallback(mdl, episodeConfig)
+    global session
     in = Simulink.SimulationInput(mdl);
     in = in.setVariable('initialPos', episodeConfig.pos);
-    sim(in);
+    %sim(in);
+    %logger = bonsai.Logger('Session', false);
+    %logger.log(sprintf('Have session: %', session.lastEvent])
+    %state = containers.Map(obj.config.stateSchema, state);
+    fprintf('Starting MATLAB Episode\n');
+    session.getNextEvent(0, [327.2 368.2 197.6 178.4], false);
 end
