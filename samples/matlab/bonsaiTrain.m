@@ -12,7 +12,7 @@ set_param(mdl, 'FastRestart', 'on');
 
 % run training
 config = bonsaiConfig;
-BonsaiRunTraining(config, mdl, @episodeStartCallback);
+MatlabBonsaiRunTraining(config, mdl, @episodeStartCallback);
 
 % callback for running model with provided episode configuration
 function episodeStartCallback(mdl, episodeConfig)
