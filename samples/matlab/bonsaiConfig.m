@@ -32,7 +32,8 @@ function config = bonsaiConfig
     % config.timeout = 60;
 
     % path to csv file where episode data should be logged
-    config.outputCSV = "cartpole-training.csv";
+    % CSVWriter fails if state contains arrays.
+    config.outputCSV = '';
 
     % % display verbose logs
     % config.verbose = true;

@@ -11,9 +11,13 @@ BonsaiRunTraining(config, 'No Simulink Model', @episodeStartCallback);
 
 function state = getState(iteration)
     varCount = 4;
-    state = zeros(1, varCount);
+    state = cell(1, varCount);
     for i=1:varCount
-        state(i) = iteration * 0.1 + i * 0.01;
+        if i < varCount
+            state{i} = iteration * 0.1 + i * 0.01;
+        else
+            state{i} = [iteration * 0.1 + i * 0.01, iteration + 10];
+        end
     end
 end
 
