@@ -24,5 +24,19 @@ function episodeStartCallback(mdl, episodeConfig)
     %logger.log(sprintf('Have session: %', session.lastEvent])
     %state = containers.Map(obj.config.stateSchema, state);
     fprintf('Starting MATLAB Episode\n');
-    session.getNextEvent(0, [327.2 368.2 197.6 178.4], false);
+    session.getNextEvent(0, [0.11 0.12 0.13 0.14], false);
+    disp(session.lastEvent)
+    if session.lastEvent == bonsai.EventTypes.EpisodeStep
+        disp(session.lastAction)
+    end
+    session.getNextEvent(0, [0.21 0.22 0.23 0.24], false);
+    disp(session.lastEvent)
+    if session.lastEvent == bonsai.EventTypes.EpisodeStep
+        disp(session.lastAction)
+    end
+    session.getNextEvent(0, [10 20 30 40], false);
+    disp(session.lastEvent)
+    if session.lastEvent == bonsai.EventTypes.EpisodeStep
+        disp(session.lastAction)
+    end
 end
