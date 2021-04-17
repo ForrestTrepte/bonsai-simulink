@@ -14,6 +14,14 @@ set_param(mdl, 'FastRestart', 'on');
 config = bonsaiConfig;
 MatlabBonsaiRunTraining(config, mdl, @episodeStartCallback);
 
+function state = getState(iteration)
+    varCount = 4;
+    state = zeros(1, varCount);
+    for i=1:varCount
+        state(i) = iteration * 0.1 + i * 0.01;
+    end
+end
+
 % callback for running model with provided episode configuration
 function episodeStartCallback(mdl, episodeConfig)
     global session
@@ -24,19 +32,15 @@ function episodeStartCallback(mdl, episodeConfig)
     %logger.log(sprintf('Have session: %', session.lastEvent])
     %state = containers.Map(obj.config.stateSchema, state);
     fprintf('Starting MATLAB Episode\n');
-    session.getNextEvent(0, [0.11 0.12 0.13 0.14], false);
-    disp(session.lastEvent)
-    if session.lastEvent == bonsai.EventTypes.EpisodeStep
-        disp(session.lastAction)
-    end
-    session.getNextEvent(0, [0.21 0.22 0.23 0.24], false);
-    disp(session.lastEvent)
-    if session.lastEvent == bonsai.EventTypes.EpisodeStep
-        disp(session.lastAction)
-    end
-    session.getNextEvent(0, [10 20 30 40], false);
-    disp(session.lastEvent)
-    if session.lastEvent == bonsai.EventTypes.EpisodeStep
+    disp(session.config.stateSchema);
+    disp(episodeConfig);
+    iteration = 0;
+    while true
+        iteration = iteration + 1;
+        session.getNextEvent(iteration, getState(iteration), false);
+        if session.lastEvent ~= bonsai.EventTypes.EpisodeStep
+            return
+        end
         disp(session.lastAction)
     end
 end
