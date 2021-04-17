@@ -5,14 +5,9 @@
 % must begin training your brain in the web, selecting the "Simulink Cartpole"
 % simulator.
 
-% load model and enable fast restart
-mdl = 'cartpole_discrete';
-load_system(mdl);
-set_param(mdl, 'FastRestart', 'on');
-
 % run training
 config = bonsaiConfig;
-MatlabBonsaiRunTraining(config, mdl, @episodeStartCallback);
+BonsaiRunTraining(config, 'No Simulink Model', @episodeStartCallback);
 
 function state = getState(iteration)
     varCount = 4;
@@ -24,16 +19,13 @@ end
 
 % callback for running model with provided episode configuration
 function episodeStartCallback(mdl, episodeConfig)
-    global session
-    in = Simulink.SimulationInput(mdl);
-    in = in.setVariable('initialPos', episodeConfig.pos);
-    %sim(in);
-    %logger = bonsai.Logger('Session', false);
-    %logger.log(sprintf('Have session: %', session.lastEvent])
-    %state = containers.Map(obj.config.stateSchema, state);
-    fprintf('Starting MATLAB Episode\n');
+    session = bonsai.Session.getInstance();
+    logger = bonsai.Logger('BonsaiBlock', session.config.verbose);
+    
+    logger.log('Starting MATLAB Episode\n');
     disp(session.config.stateSchema);
-    disp(episodeConfig);
+    logger.log(sprintf('config.pos = %0.3g', episodeConfig.pos));
+    
     iteration = 0;
     while true
         iteration = iteration + 1;
