@@ -1,20 +1,20 @@
 inkling "2.0"
 
 type SimState {
-    observation1: number[10], 
-    observation2: number[20],
+    observation1: number[3], 
+    observation2: number[4],
     sim_reward: number
 }
 
 type ObservationState{
-    observation1: number[10], 
-    observation2: number[20],
+    observation1: number[3], 
+    observation2: number[4],
 }
 
 # multiarm bandit actions. 
 type SimAction{
-    action_array1: number<0 .. 10>[10],
-    action_array2: number<0 .. 10>[20],
+    action_array1: number<0 .. 10>[3],
+    action_array2: number<0 .. 10>[4],
 }
 
 type SimConfig {
