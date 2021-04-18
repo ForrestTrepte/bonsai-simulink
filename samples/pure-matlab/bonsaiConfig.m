@@ -21,11 +21,11 @@ function config = bonsaiConfig
     config.bonsaiBlock = "cartpole_discrete/Bonsai";
 
     % % set state and action schemas (overrides data from bonsaiBlock)
-    config.stateSchema = ["x", "observationsA", "observationsB"];
-    config.actionSchema = ["dx", "actionsA", "actionsB"];
+    config.stateSchema = ["observation1", "observation2", "sim_reward"];
+    config.actionSchema = ["array_action1", "array_action2"];
 
     % set config schema
-    config.configSchema = ["initial_x", "initial_observationsA", "initial_observationsB"];
+    config.configSchema = ["config_array3"];
 
     % % time (in seconds) the simulator gateway should wait for
     % %   your simulator to advance, defaults to 60

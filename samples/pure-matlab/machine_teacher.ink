@@ -1,61 +1,60 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT License.
-
 inkling "2.0"
 
-using Math
-
-# thresholds
-const max_x = 10
-
 type SimState {
-    x: number,
-    observationsA: number[3],
-    observationsB: number[5],
+    observation1: number[10], 
+    observation2: number[20],
+    sim_reward: number
 }
 
-type Action {
-    dx: number<-2.0 .. 2.0>,
-    actionsA: number<0, 1, 2>[3],
-    actionsB: number<-1.0 .. 1.0>[5],
+type ObservationState{
+    observation1: number[10], 
+    observation2: number[20],
 }
 
-type Config {
-    initial_x: number,
-    initial_observationsA: number[3],
-    initial_observationsB: number[5],
+# multiarm bandit actions. 
+type SimAction{
+    action_array1: number<0 .. 10>[10],
+    action_array2: number<0 .. 10>[20],
 }
 
-function Reward(obs: SimState) {
-    return -Math.Abs(obs.x)
+type SimConfig {
+    config_array3: number[2],
 }
 
-function Terminal(obs: SimState) {
-    return Math.Abs(obs.x) > max_x
+function Reward(sim_observation: SimState){
+    return sim_observation.sim_reward
 }
 
-simulator PureMatlabSimulator(action: Action, config: Config): SimState {
-    #package "pure-matlab3-passmodel"
+# irrelevant 
+# function Terminal(sim_obervation: SimState){
+#     return sim_obervation.sim_terminal
+# }
+
+simulator Simulator(action: SimAction, config: SimConfig): SimState {
 }
 
-graph (input: SimState): Action {
-    concept balance(input): Action {
+graph (input: ObservationState): SimAction {
+
+    concept optimize(input): SimAction {
         curriculum {
-            source PureMatlabSimulator
-            reward Reward
-            terminal Terminal
-            training {
-                EpisodeIterationLimit: 10,
-                NoProgressIterationLimit: 100000
+            algorithm {
+                Algorithm: "PPO",
+                #BatchSize: 8000,
+                #PolicyLearningRate: 0.001
             }
-            lesson balancing {
+            training {
+                EpisodeIterationLimit: 5,
+                NoProgressIterationLimit: 500000
+            }
+            source Simulator
+            reward Reward
+
+            lesson `learn 1` {
                 scenario {
-                    initial_x: number<-5 .. 5>,
-                    initial_observationsA: number<0, 1, 2>[3],
-                    initial_observationsB: number<-1.0 .. 1.0>[5],
+                    config_array3: number<3>[2],
                 }
             }
         }
     }
-    output balance
+    output optimize 
 }
