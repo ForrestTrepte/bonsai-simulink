@@ -12,7 +12,7 @@ set_param(mdl, 'FastRestart', 'off');
 
 % configure exported brain
 config = bonsaiConfig;
-BonsaiConfigureExportConnect(config, mdl);
+BonsaiConfigureExportConnect(config, 'NoSimulink);
 
 % any initial data required for compilation should go here
 initialPos = 0;

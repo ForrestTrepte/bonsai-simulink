@@ -6,44 +6,30 @@ inkling "2.0"
 using Math
 
 # thresholds
-const PositionThreshold = 4.0
-const AngleThreshold = 0.26
+const max_x = 10
 
 type SimState {
-    position: number,
-    velocity: number,
-    angle: number,
-    rotation: number
+    x: number,
 }
 
 type Action {
-    command: number<-10.0, 10.0,>
+    dx: number<-2.0 .. 2.0>
 }
 
 type CartPoleConfig {
-    pos: number
+    initial_x: number
 }
 
 function Reward(obs: SimState) {
-    if FellOver(obs) or OutOfRange(obs) {
-        return 0
-    }
-    return 1
+    return -Math.Abs(obs.x)
 }
 
 function Terminal(obs: SimState) {
-    return FellOver(obs) or OutOfRange(obs)
-}
-
-function FellOver(obs: SimState) {
-    return Math.Abs(obs.angle) > AngleThreshold
-}
-
-function OutOfRange(obs: SimState) {
-    return Math.Abs(obs.position) > PositionThreshold
+    return Math.Abs(obs.x) > max_x
 }
 
 simulator CartpoleSimulator(action: Action, config: CartPoleConfig): SimState {
+    #package "matlab3-nopass"
 }
 
 graph (input: SimState): Action {
@@ -52,9 +38,13 @@ graph (input: SimState): Action {
             source CartpoleSimulator
             reward Reward
             terminal Terminal
+            training {
+                EpisodeIterationLimit: 10,
+                NoProgressIterationLimit: 100000
+            }
             lesson balancing {
                 scenario {
-                    pos: 0.0
+                    initial_x: number<-5 .. 5>
                 }
             }
         }

@@ -15,17 +15,17 @@ function config = bonsaiConfig
     config.accessKey = "<your access key here>";
 
     % simulator name, for an unmanaged simulator launched from the desktop to show up on the web
-    config.name = "Simulink Cartpole";
+    config.name = "Pure MATLAB";
 
     % path to bonsai block in your model, used to determine state and action schemas
     config.bonsaiBlock = "cartpole_discrete/Bonsai";
 
     % % set state and action schemas (overrides data from bonsaiBlock)
-    % config.stateSchema = ["position", "velocity", "angle", "rotation"];
-    % config.actionSchema = ["command"];
+    config.stateSchema = ["x"];
+    config.actionSchema = ["dx"];
 
     % set config schema
-    config.configSchema = ["pos"];
+    config.configSchema = ["initial_x"];
 
     % % time (in seconds) the simulator gateway should wait for
     % %   your simulator to advance, defaults to 60
