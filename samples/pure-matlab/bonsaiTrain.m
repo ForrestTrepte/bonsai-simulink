@@ -11,12 +11,6 @@
 global simulation
 simulation = Simulation;
 
-% load model and enable fast restart
-% TODO: This model is not used. Can we remove it from this sample?
-mdl = 'cartpole_discrete';
-load_system(mdl);
-set_param(mdl, 'FastRestart', 'on');
-
 % run training
 config = bonsaiConfig;
 BonsaiRunTraining(config, 'NonSimulinkModel', @episodeStartCallback);
